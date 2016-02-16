@@ -5,21 +5,22 @@
  */
 package view;
 
+
 /**
  * Classe responsável por inicializar a aplicação Roda Roda
  *
  * @author Geovane
  * @author José Sérgio
- * @version 1.0
+ * @version 2.0
  *
  */
 public class RodaRoda {
 
-    public static void main(String[] args) {
+    public static void main(String[] args){
         menu();
     }
     
     public static void menu(){
-    
+ 
     }
 }
