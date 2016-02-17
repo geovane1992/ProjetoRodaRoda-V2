@@ -1,6 +1,7 @@
 package model;
 
 
+import java.util.ArrayList;
 import model.Jogador;
 import model.Etapa;
 
@@ -9,7 +10,7 @@ public class Partida {
 
     private Etapa etapa;
     private Jogador jogador;
-    private Jogador[] lstJogador;
+    private ArrayList<Jogador> lstJogador;
     private Etapa[] lstEtapa;
 
     public Etapa getEtapa() {
@@ -28,13 +29,15 @@ public class Partida {
         this.jogador = jogador;
     }
 
-    public Jogador[] getLstJogador() {
+    public ArrayList<Jogador> getLstJogador() {
         return lstJogador;
     }
 
-    public void setLstJogador(Jogador[] lstJogador) {
+    public void setLstJogador(ArrayList<Jogador> lstJogador) {
         this.lstJogador = lstJogador;
     }
+
+    
 
     public Etapa[] getLstEtapa() {
         return lstEtapa;
