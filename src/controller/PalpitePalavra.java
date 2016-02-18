@@ -1,16 +1,42 @@
 package controller;
 
+import java.util.ArrayList;
+import java.util.List;
 
-import controller.Observer;
+public class PalpitePalavra implements Observado {
 
-public class PalpitePalavra implements Observer {
+    private List<Observador> observadores;
+    private List<String> listaPalavras;
+    
+    public PalpitePalavra(){
+        this.observadores = new ArrayList<>();
+        this.listaPalavras = new ArrayList<>();
+    }
+    
+    public void receberPalavra(String palavra){
+        this.listaPalavras.add(palavra);
+        this.notificarObservadores();
+    }
 
+    @Override
+    public void incluirObservador(Observador obs) {
+        this.observadores.add(obs);
+    }
 
-	/**
-	 * @see Observer#notifica()
-	 */
-	public void notifica() {
+    @Override
+    public void removerObservador(Observador obs) {
+        int id = this.observadores.indexOf(obs);
+        if(id >= 0){
+            this.observadores.remove(obs);
+        }
+    }
 
-	}
+    @Override
+    public void notificarObservadores() {
+        for(Observador observador : observadores){
+            observador.updatePalavra(this.listaPalavras.get(this.listaPalavras.size()-1));
+        }
+    }
+
 
 }

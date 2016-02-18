@@ -14,6 +14,7 @@ public class ControlePartida {
     public static void iniciaPartida(ParametrosIniciais paramtros) throws IOException{
     Partida partida = new Partida();
     ArrayList<Jogador> lJogadores = new ArrayList<>();
+    int etapa;
     
         for(int jogadores = 0; jogadores < paramtros.getQtdJogadores(); jogadores++ ){
             Jogador jogador = new Jogador();
@@ -22,8 +23,8 @@ public class ControlePartida {
         }
         partida.setLstJogador(lJogadores);
         
-        for(int etapas = 0; etapas < paramtros.getQtdEtapas(); etapas++){
-            ControleEtapa.iniciaEtapa(paramtros);
+        for(etapa = 1; etapa <= paramtros.getQtdEtapas(); etapa++){
+            ControleEtapa.iniciaEtapa(paramtros, etapa);
         }
         
     }
