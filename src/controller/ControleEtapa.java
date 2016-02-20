@@ -2,18 +2,26 @@ package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Scanner;
 import model.Etapa;
+import model.Jogador;
 import model.ParametrosIniciais;
 
-/**
- *
- * @author GAOliveira
- */
 public class ControleEtapa implements Observador{
     
     int etapa;
-    String letraSelecionada;
-    String palavraSelecionada;
+    static String letraSelecionada;
+    static String palavraSelecionada;
+    static List<String> listLetrasJaEscolhidas = new ArrayList<String>();
+    static List<Jogador> listJogadores = new ArrayList<Jogador>();
+    static String jogadorCorrente = "Jogador1";
+    static List<String> listaPalavrasASeremDescobertas = new ArrayList<String>();
+    static int qtdErrosJogador;
+    static boolean terminouPalavras = false;
+    static boolean validaSeLetraFoiEncontrada = true;
     
     public ControleEtapa(int etapa, Observado obs){
         this.etapa = etapa;
@@ -23,6 +31,7 @@ public class ControleEtapa implements Observador{
     @Override
     public void updateLetra(String letra) {
         letraSelecionada = letra;
+        
     }
 
     @Override
@@ -30,42 +39,194 @@ public class ControleEtapa implements Observador{
         palavraSelecionada = palavra;
     }
     
+    public static void jogadorEscolheLetra(String jogad){
+        Scanner leitor = new Scanner(System.in);
+        System.out.println(jogad + " informe uma letra!");
+        String letraEscolhida = leitor.nextLine();
+        letraSelecionada = letraEscolhida;
+        
+        PalpiteLetra letra = new PalpiteLetra();
+        Observador jogador = new ControleJogador(jogad, letra);
+        letra.receberLetras(letraEscolhida);
+        listLetrasJaEscolhidas.add(letraEscolhida);
+    }
+    
+    public static void jogadorEscolhePalavras(String jogad){
+        Scanner leitor = new Scanner(System.in);
+        System.out.println("Informe uma palavra!");
+        String palavraEscolhida = leitor.nextLine();
+        
+        PalpitePalavra palavra = new PalpitePalavra();
+        Observador jogador = new ControleJogador(jogad, palavra);
+        palavra.receberPalavra(palavraEscolhida);
+    }
+    
+    public static boolean mostraPalavrasAacertar(int qtdPalavras, List<String> listaPalavrasEtapa){
+        
+        System.out.println(listaPalavrasEtapa.get(1));
+        System.out.println(listaPalavrasEtapa.get(2));
+        System.out.println(listaPalavrasEtapa.get(3));
+        validaSeLetraFoiEncontrada = false;
+
+        for(int x = 1; x <= qtdPalavras; x++){
+            String palavraOculta = "#";
+                for(int i = 1; i < listaPalavrasEtapa.get(x).length(); i++){
+                    palavraOculta = palavraOculta + "#";    
+                }              
+                
+            listaPalavrasASeremDescobertas.add(palavraOculta);
+            String s= listaPalavrasEtapa.get(x);
+            char arr[]=s.toCharArray();
+            for(int i=0;i<arr.length;i++){
+                if(String.valueOf(arr[i]).equals(letraSelecionada)){
+                    
+                    StringBuilder String = new StringBuilder(listaPalavrasASeremDescobertas.get(x-1));
+                    StringBuilder sb = String.replace(i, i+1, letraSelecionada);
+                    listaPalavrasASeremDescobertas.remove(x-1);
+                    listaPalavrasASeremDescobertas.add(x-1, sb.toString());
+                    
+                    validaSeLetraFoiEncontrada = true;
+
+                }
+            }
+                
+            System.out.println(listaPalavrasASeremDescobertas.get(x-1));
+ 
+        }
+        switch(qtdPalavras){
+            case 1:
+                if(!listaPalavrasASeremDescobertas.get(0).contains("#")){
+                    terminouPalavras = true;
+                    System.out.println(jogadorCorrente + " ganhou a etapa!");
+                }
+            break;
+            case 2:
+                if(!listaPalavrasASeremDescobertas.get(0).contains("#") && !listaPalavrasASeremDescobertas.get(1).contains("#")){
+                    terminouPalavras = true;
+                    System.out.println(jogadorCorrente + " ganhou a etapa!");
+                }
+            break;
+            case 3:
+                if(!listaPalavrasASeremDescobertas.get(0).contains("#") && !listaPalavrasASeremDescobertas.get(1).contains("#") && !listaPalavrasASeremDescobertas.get(2).contains("#")){
+                    terminouPalavras = true;
+                    System.out.println(jogadorCorrente + " ganhou a etapa!");
+                }
+            break;
+        }
+
+                 
+//        if(Arrays.asList(listaPosicaoLetrasEncontradasPalavra1).contains(letraEscolhida)){
+           
+
+//        }
+//                Iterator<String> iterator = listLetrasJaEscolhidas.iterator();
+                
+                // exibe os itens da lista usando um Iterator	
+//                for(Iterator<String> it = listaPalavrasASeremDescobertas.iterator(); it.hasNext();){
+//                  System.out.println(it.next());  
+//                }
+            return validaSeLetraFoiEncontrada;
+    }
+  
+    
     public static void iniciaEtapa(ParametrosIniciais paramtros, int etapaAtual) throws IOException{
     
     ArrayList<String> letrasEscolhidas = new ArrayList<>();
     Etapa etapa = new Etapa();
-        etapa.setLstPalavras(LeitorArquivo.palavrasSorteadas());
-        
+    etapa.setLstPalavras(LeitorArquivo.palavrasSorteadas());
+  
         System.out.println("***** Etapa: " + etapaAtual + " --> DICA: " + etapa.getLstPalavras().get(0) + " ***** ");
-        
-        switch(paramtros.getQtdPalavras()){
-            case 1: 
-                for(int i = 0; i < etapa.getLstPalavras().get(0).length(); i++){
-                    System.out.print("#");
-                }
-                System.out.print("\n\n");
-            break;
-                
-            case 2:
-                for(int x = 0; x < paramtros.getQtdPalavras(); x++){
-                    for(int i = 0; i < etapa.getLstPalavras().get(x).length(); i++){
-                        System.out.print("#");
-                    }
-                    System.out.print("\n");
-                }
-            break;
-                
-            case 3:
-                for(int x = 0; x < paramtros.getQtdPalavras(); x++){
-                    for(int i = 0; i < etapa.getLstPalavras().get(x).length(); i++){
-                        System.out.print("#");
-                    }
-                    System.out.print("\n");
-                }
-            break;
+        for(int x = 1; x <= paramtros.getQtdPalavras(); x++){
+            String palavraOculta = "#";
+                for(int i = 1; i < etapa.getLstPalavras().get(x).length(); i++){
+                    palavraOculta = palavraOculta + "#";    
+                } 
+        listaPalavrasASeremDescobertas.add(palavraOculta);
+            System.out.println(listaPalavrasASeremDescobertas.get(x-1));
         }
         
-        
+        for(int i = 0; i < paramtros.getQtdJogadores(); i++){
+            Jogador jogador = new Jogador();
+            jogador.setNome("Jogador" + (i+1));
+            jogador.setPontuacao(0);
+            listJogadores.add(jogador);
+        }
+     
+        boolean validador = true;  
+
+        while (terminouPalavras == false) {
+
+            if(validaSeLetraFoiEncontrada == true){
+                jogadorEscolheLetra(jogadorCorrente);
+                validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
+//                jogadorEscolheLetra(jogadorCorrente);
+            }
+            else{
+                switch(paramtros.getQtdJogadores()){
+                    
+                    case 1:
+                        if(!listaPalavrasASeremDescobertas.get(0).contains("#")){
+                            terminouPalavras = true;
+                            System.out.println(jogadorCorrente + " ganhou a etapa!");
+                        }
+                        if(qtdErrosJogador <= 3){
+                            validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
+                            validador = true;
+                            qtdErrosJogador = qtdErrosJogador + 1;
+                        }
+                        else{
+                            System.out.println("Você perdeu, pratique mais!");
+                            
+                        }
+                    break;
+                    
+                    case 2:
+                        boolean jaPercorreuAnterior = false;
+                         if(jogadorCorrente.equals(listJogadores.get(0).getNome())){ 
+                             jogadorCorrente = listJogadores.get(1).getNome();
+                             jogadorEscolheLetra(jogadorCorrente);
+                             validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
+                             jaPercorreuAnterior = true;
+                         }
+                         if(jogadorCorrente.equals(listJogadores.get(1).getNome()) && jaPercorreuAnterior == false){    
+                            jogadorCorrente = listJogadores.get(0).getNome();
+                            jogadorEscolheLetra(jogadorCorrente);
+                            validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
+                         }
+                    break;
+                        
+                    case 3:
+                        boolean jaPercorreuAnterior1 = false;
+                        boolean jaPercorreuAnterior2 = false;
+                         if(jogadorCorrente.equals(listJogadores.get(0).getNome()) && jaPercorreuAnterior1 == false){ 
+                             validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
+                             if(validador == false){
+                                jogadorCorrente = listJogadores.get(1).getNome();
+                                jogadorEscolheLetra(jogadorCorrente);
+                             }
+                             jaPercorreuAnterior1 = true;
+                         }
+                         if(jogadorCorrente.equals(listJogadores.get(1).getNome()) && jaPercorreuAnterior1 == false){ 
+                             validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
+                             if(validador == false){
+                                jogadorCorrente = listJogadores.get(2).getNome();
+                                jogadorEscolheLetra(jogadorCorrente); 
+                             }
+                             jaPercorreuAnterior2 = true;
+                         }
+                         if(jogadorCorrente.equals(listJogadores.get(2).getNome()) && jaPercorreuAnterior1 == false && jaPercorreuAnterior2 == false){ 
+                             validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
+                             if(validador == false){
+                                jogadorCorrente = listJogadores.get(0).getNome();
+                                jogadorEscolheLetra(jogadorCorrente);  
+                             }
+                         }
+                    break;    
+                }
+              
+            }
+        }
+ 
     }
     
 }

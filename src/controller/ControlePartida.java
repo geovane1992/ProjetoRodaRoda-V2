@@ -25,6 +25,7 @@ public class ControlePartida {
         
         for(etapa = 1; etapa <= paramtros.getQtdEtapas(); etapa++){
             ControleEtapa.iniciaEtapa(paramtros, etapa);
+            
         }
         
     }
