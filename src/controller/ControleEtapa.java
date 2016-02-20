@@ -152,9 +152,10 @@ public class ControleEtapa implements Observador{
             listJogadores.add(jogador);
         }
      
-        boolean validador = true;  
+        boolean validador = true; 
+        boolean sair = false;
 
-        while (terminouPalavras == false) {
+        while (terminouPalavras == false && sair == false) {
 
             if(validaSeLetraFoiEncontrada == true){
                 jogadorEscolheLetra(jogadorCorrente);
@@ -169,15 +170,16 @@ public class ControleEtapa implements Observador{
                             terminouPalavras = true;
                             System.out.println(jogadorCorrente + " ganhou a etapa!");
                         }
-                        if(qtdErrosJogador <= 3){
+                        if(qtdErrosJogador < 3){
+                            jogadorEscolheLetra(jogadorCorrente);
                             validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
-                            validador = true;
                             qtdErrosJogador = qtdErrosJogador + 1;
                         }
                         else{
-                            System.out.println("Você perdeu, pratique mais!");
-                            
+                            System.out.println("Você perdeu, pratique mais!"); 
+                            sair = true;
                         }
+                       
                     break;
                     
                     case 2:

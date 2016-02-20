@@ -2,9 +2,14 @@ package controller;
 
 public class FormaViciada implements FormaSorteio {
 
+    /**
+     * Realiza o sorteio de forma viciada. Sempre retorna PASSA_VEZ
+     * @param valores
+     * @return 
+     */
     @Override
-    public int realizaSorteio(int[] valores) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public EnumResultados realizaSorteio(EnumResultados [] valores) {
+        return EnumResultados.PASSA_VEZ;
     }
 
 }
