@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.List;
+
 public class FormaViciada implements FormaSorteio {
 
     /**
@@ -8,7 +10,7 @@ public class FormaViciada implements FormaSorteio {
      * @return 
      */
     @Override
-    public EnumResultados realizaSorteio(EnumResultados [] valores) {
+    public EnumResultados realizaSorteio(List<EnumResultados> valores) {
         return EnumResultados.PASSA_VEZ;
     }
 

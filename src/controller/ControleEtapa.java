@@ -16,6 +16,7 @@ public class ControleEtapa implements Observador{
     static String letraSelecionada;
     static String palavraSelecionada;
     static List<String> listLetrasJaEscolhidas = new ArrayList<String>();
+    static List<String> listPalavrasJaEscolhidas = new ArrayList<String>();
     static List<Jogador> listJogadores = new ArrayList<Jogador>();
     static String jogadorCorrente = "Jogador1";
     static List<String> listaPalavrasASeremDescobertas = new ArrayList<String>();
@@ -59,6 +60,7 @@ public class ControleEtapa implements Observador{
         PalpitePalavra palavra = new PalpitePalavra();
         Observador jogador = new ControleJogador(jogad, palavra);
         palavra.receberPalavra(palavraEscolhida);
+        listLetrasJaEscolhidas.add(palavraEscolhida);
     }
     
     public static boolean mostraPalavrasAacertar(int qtdPalavras, List<String> listaPalavrasEtapa){
@@ -130,6 +132,31 @@ public class ControleEtapa implements Observador{
   
     
     public static void iniciaEtapa(ParametrosIniciais paramtros, int etapaAtual) throws IOException{
+
+     Iterator<String> it = listLetrasJaEscolhidas.iterator();
+        while(it.hasNext()){
+            if(it.next() != null){
+                it.remove();
+            }
+        }
+        
+        Iterator<String> it2 = listPalavrasJaEscolhidas.iterator();
+        while(it2.hasNext()){
+            if(it2.next() != null){
+                it2.remove();
+            }
+        }
+        
+        Iterator<String> it3 = listaPalavrasASeremDescobertas.iterator();
+        while(it3.hasNext()){
+            if(it3.next() != null){
+                it3.remove();
+            }
+        }
+     terminouPalavras = false;
+     validaSeLetraFoiEncontrada = true;
+     
+     //-------------------------------------------------------------------------
     
     ArrayList<String> letrasEscolhidas = new ArrayList<>();
     Etapa etapa = new Etapa();

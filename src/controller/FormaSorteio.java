@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.List;
+
 /**
  * Interface para implementação do padrão Strategy
  * @author Vinicius
@@ -11,5 +13,5 @@ public interface FormaSorteio {
      * @param valores dentro os quais um será sorteado.
      * @return um dos valores selecionados.
      */
-    public EnumResultados realizaSorteio(EnumResultados [] valores);
+    public EnumResultados realizaSorteio(List<EnumResultados> valores);
 }

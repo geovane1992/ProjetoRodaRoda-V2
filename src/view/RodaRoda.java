@@ -1,10 +1,6 @@
 package view;
 
-import controller.ControleJogador;
 import controller.ControlePartida;
-import controller.Observador;
-import controller.PalpiteLetra;
-import controller.PalpitePalavra;
 import java.io.IOException;
 import java.util.Scanner;
 import model.ParametrosIniciais;
