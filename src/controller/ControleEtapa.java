@@ -8,6 +8,7 @@ import java.util.Scanner;
 import model.Etapa;
 import model.Jogador;
 import model.ParametrosIniciais;
+import model.Roleta;
 
 public class ControleEtapa implements Observador{
     
@@ -22,6 +23,8 @@ public class ControleEtapa implements Observador{
     static int qtdErrosJogador;
     static boolean terminouPalavras = false;
     static boolean validaSeLetraFoiEncontrada = true;
+    static int posicaoJogadorCorrenteNaLista = 0;
+    static EnumResultados valorSorteado = null;
     
     public ControleEtapa(int etapa, Observado obs){
         this.etapa = etapa;
@@ -30,7 +33,7 @@ public class ControleEtapa implements Observador{
 
     @Override
     public void updateLetra(String letra) {
-        letraSelecionada = letra;
+        letraSelecionada = letra;        
         
     }
 
@@ -43,12 +46,12 @@ public class ControleEtapa implements Observador{
         Scanner leitor = new Scanner(System.in);
         System.out.println(jogad + " informe uma letra!");
         String letraEscolhida = leitor.nextLine();
-        letraSelecionada = letraEscolhida;
+        letraSelecionada = letraEscolhida.toUpperCase();
         
         PalpiteLetra letra = new PalpiteLetra();
         Observador jogador = new ControleJogador(jogad, letra);
-        letra.receberLetras(letraEscolhida);
-        listLetrasJaEscolhidas.add(letraEscolhida);
+        letra.receberLetras(letraEscolhida.toUpperCase());
+        listLetrasJaEscolhidas.add(letraEscolhida.toUpperCase());
     }
     
     public static List<String> jogadorEscolhePalavras(String jogad){
@@ -58,8 +61,8 @@ public class ControleEtapa implements Observador{
         
         PalpitePalavra palavra = new PalpitePalavra();
         Observador jogador = new ControleJogador(jogad, palavra);
-        palavra.receberPalavra(palavraEscolhida);
-        listPalavrasJaEscolhidas.add(palavraEscolhida);
+        palavra.receberPalavra(palavraEscolhida.toUpperCase());
+        listPalavrasJaEscolhidas.add(palavraEscolhida.toUpperCase());
         
         return listPalavrasJaEscolhidas;
     }
@@ -87,6 +90,51 @@ public class ControleEtapa implements Observador{
                     StringBuilder sb = String.replace(i, i+1, letraSelecionada);
                     listaPalavrasASeremDescobertas.remove(x-1);
                     listaPalavrasASeremDescobertas.add(x-1, sb.toString());
+                    
+                    switch(valorSorteado){
+                        case PONTOS_1000:
+                            listJogadores.get(posicaoJogadorCorrenteNaLista-1).setPontuacao(listJogadores.get(posicaoJogadorCorrenteNaLista-1).getPontuacao() + 1000);
+                        break;
+                        case PONTOS_500:
+                            listJogadores.get(posicaoJogadorCorrenteNaLista-1).setPontuacao(listJogadores.get(posicaoJogadorCorrenteNaLista-1).getPontuacao() + 500);
+                        break;
+                        case PONTOS_400:
+                            listJogadores.get(posicaoJogadorCorrenteNaLista-1).setPontuacao(listJogadores.get(posicaoJogadorCorrenteNaLista-1).getPontuacao() + 400);
+                        break;
+                        case PONTOS_200:
+                            listJogadores.get(posicaoJogadorCorrenteNaLista-1).setPontuacao(listJogadores.get(posicaoJogadorCorrenteNaLista-1).getPontuacao() + 200);
+                        break;
+                        case PONTOS_100:
+                            listJogadores.get(posicaoJogadorCorrenteNaLista-1).setPontuacao(listJogadores.get(posicaoJogadorCorrenteNaLista-1).getPontuacao() + 100);
+                        break;
+                        case PASSA_VEZ:
+                            switch(listJogadores.size()){
+                                case 2:
+                                    if(jogadorCorrente.equals("jogador1")){
+                                        jogadorCorrente = "jogador2";
+                                    }
+                               else if(jogadorCorrente.equals("jogador2")){
+                                        jogadorCorrente = "jogador1";
+                                    }
+                                break;
+                                case 3:
+                                     if(jogadorCorrente.equals("jogador1")){
+                                        jogadorCorrente = "jogador2";
+                                    }
+                               else if(jogadorCorrente.equals("jogador2")){
+                                        jogadorCorrente = "jogador3";
+                                    }
+                               else if(jogadorCorrente.equals("jogador3")){
+                                        jogadorCorrente = "jogador1";
+                                    }
+                                break;
+                            }
+                        break;
+                        case PERDE_TUDO:
+                            listJogadores.get(posicaoJogadorCorrenteNaLista-1).setPontuacao(0);
+                        break;
+                        
+                    }
                     
                     validaSeLetraFoiEncontrada = true;
 
@@ -128,6 +176,7 @@ public class ControleEtapa implements Observador{
 //                for(Iterator<String> it = listaPalavrasASeremDescobertas.iterator(); it.hasNext();){
 //                  System.out.println(it.next());  
 //                }
+            System.out.println("O valor acumulado está em --> R$ " + listJogadores.get(posicaoJogadorCorrenteNaLista-1).getPontuacao());
             return validaSeLetraFoiEncontrada;
     }
   
@@ -161,7 +210,9 @@ public class ControleEtapa implements Observador{
     
     ArrayList<String> letrasEscolhidas = new ArrayList<>();
     Etapa etapa = new Etapa();
+    Roleta roleta = new Roleta();
     etapa.setLstPalavras(LeitorArquivo.palavrasSorteadas());
+    posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
     Scanner sc = new Scanner(System.in);
   
         System.out.println("***** Etapa: " + etapaAtual + " --> DICA: " + etapa.getLstPalavras().get(0) + " ***** ");
@@ -187,6 +238,52 @@ public class ControleEtapa implements Observador{
         while (terminouPalavras == false && sair == false) {
 
             if(validaSeLetraFoiEncontrada == true){
+                valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
+                System.out.println("Valor sorteado foi --> " + valorSorteado);
+                if(String.valueOf(valorSorteado).equals("PASSA_VEZ") || String.valueOf(valorSorteado).equals("PERDE_TUDO")){
+                    switch(listJogadores.size()){
+                                case 2:
+                                    boolean val = false;
+                                    if(jogadorCorrente.equals("Jogador1")){
+                                        jogadorCorrente = "jogador2";
+                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
+                                        System.out.println("Valor sorteado foi --> " + valorSorteado);
+                                        val = true;
+                                    }
+                               else if(jogadorCorrente.equals("Jogador2") && val == false){
+                                        jogadorCorrente = "Jogador1";
+                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
+                                        System.out.println("Valor sorteado foi --> " + valorSorteado);
+                                    }
+                                break;
+                                case 3:
+                                    boolean val1 = false;
+                                    boolean val2 = false;
+                                     if(jogadorCorrente.equals("Jogador1")){
+                                        jogadorCorrente = "Jogador2";
+                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
+                                        System.out.println("Valor sorteado foi --> " + valorSorteado);
+                                        val1 = true;
+                                    }
+                               else if(jogadorCorrente.equals("Jogador2") && val1 == false){
+                                        jogadorCorrente = "Jogador3";
+                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
+                                        System.out.println("Valor sorteado foi --> " + valorSorteado);
+                                        val2 = true;
+                                    }
+                               else if(jogadorCorrente.equals("Jogador3") && val1 == false && val2 == false){
+                                        jogadorCorrente = "Jogador1";
+                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
+                                        System.out.println("Valor sorteado foi --> " + valorSorteado);
+                                    }
+                                break;
+                            }
+                }
                 jogadorEscolheLetra(jogadorCorrente);
                 validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
 //                jogadorEscolheLetra(jogadorCorrente);
