@@ -9,7 +9,10 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Random;
 
-
+/** Declaração da classe LeitorArquivo
+ * @author Geovane e José Sérgio
+ * @version 2.0
+ */
 public class LeitorArquivo {
     
      	public static ArrayList ler() throws IOException{

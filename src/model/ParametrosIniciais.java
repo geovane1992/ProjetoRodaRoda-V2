@@ -1,9 +1,9 @@
 
 package model;
 
-/**
- *
- * @author GAOliveira
+/** Declaração da classe ParametrosIniciais
+ * @author Geovane e José Sérgio
+ * @version 2.0
  */
 public class ParametrosIniciais {
     

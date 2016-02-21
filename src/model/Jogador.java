@@ -1,6 +1,9 @@
 package model;
 
-
+/** Declaração da classe Jogador
+ * @author Geovane e José Sérgio
+ * @version 2.0
+ */
 public class Jogador {
     
     private int pontuacao;

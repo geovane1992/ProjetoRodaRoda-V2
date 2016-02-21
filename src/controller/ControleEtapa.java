@@ -10,6 +10,10 @@ import model.Jogador;
 import model.ParametrosIniciais;
 import model.Roleta;
 
+/** Declaração da classe ControleEtapa
+ * @author Geovane e José Sérgio
+ * @version 2.0
+ */
 public class ControleEtapa implements Observador{
     
     int etapa;
@@ -26,22 +30,36 @@ public class ControleEtapa implements Observador{
     static int posicaoJogadorCorrenteNaLista = 0;
     static EnumResultados valorSorteado = null;
     
+    /** Construtor da classe ControleEtapa
+     * @param etapa recebe o numero da etapa a ser realizada
+     * @param obs recebe objeto observado
+     */
     public ControleEtapa(int etapa, Observado obs){
         this.etapa = etapa;
         obs.incluirObservador(this);
     }
 
+    /**Método que implementa atualização após receber letra de observador.
+     * @param letra recebe letra enviada pelo observador.
+     */
     @Override
     public void updateLetra(String letra) {
         letraSelecionada = letra;        
         
     }
 
+     /**Método que implementa atualização após receber palavra de observador.
+     * @param palavra  recebe palavra enviada pelo observador.
+     */
     @Override
     public void updatePalavra(String palavra) {
         palavraSelecionada = palavra;
     }
     
+    /** Método responsável por receber letra informada pelo jogador e adicionar a lista
+     * de letras já escolhidas.
+     * @param jogad recebe jogador corrente.
+     */
     public static void jogadorEscolheLetra(String jogad){
         Scanner leitor = new Scanner(System.in);
         System.out.println(jogad + " informe uma letra!");
@@ -54,6 +72,11 @@ public class ControleEtapa implements Observador{
         listLetrasJaEscolhidas.add(letraEscolhida.toUpperCase());
     }
     
+    /** Método responsável por receber palavra informada pelo jogador e adicionar a lista
+     * de palavras já escolhidas.
+     * @param jogad recebe jogador corrente.
+     * @return lista de palavras já escolhidas pelo jogador
+     */
     public static List<String> jogadorEscolhePalavras(String jogad){
         Scanner leitor = new Scanner(System.in);
         System.out.println("Informe uma palavra!");
@@ -67,12 +90,19 @@ public class ControleEtapa implements Observador{
         return listPalavrasJaEscolhidas;
     }
     
+    /** Método responsável por atualizar palavra esperada a cada letra infromada e 
+     * armazenar os valores acumulados de cada jogador a cada rodada.
+     * @param qtdPalavras recebe a quantidade de palavras da etapa.
+     * @param  listaPalavrasEtapa recebe a lista de palavras da etapa
+     * @return se letra foi ou nao foi encontrada
+     */
     public static boolean mostraPalavrasAacertar(int qtdPalavras, List<String> listaPalavrasEtapa){
         
         System.out.println(listaPalavrasEtapa.get(1));
         System.out.println(listaPalavrasEtapa.get(2));
         System.out.println(listaPalavrasEtapa.get(3));
         validaSeLetraFoiEncontrada = false;
+        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
 
         for(int x = 1; x <= qtdPalavras; x++){
             String palavraOculta = "#";
@@ -110,22 +140,22 @@ public class ControleEtapa implements Observador{
                         case PASSA_VEZ:
                             switch(listJogadores.size()){
                                 case 2:
-                                    if(jogadorCorrente.equals("jogador1")){
-                                        jogadorCorrente = "jogador2";
+                                    if(jogadorCorrente.equals("Jogador1")){
+                                        jogadorCorrente = "Jogador2";
                                     }
-                               else if(jogadorCorrente.equals("jogador2")){
-                                        jogadorCorrente = "jogador1";
+                               else if(jogadorCorrente.equals("Jogador2")){
+                                        jogadorCorrente = "Jogador1";
                                     }
                                 break;
                                 case 3:
-                                     if(jogadorCorrente.equals("jogador1")){
-                                        jogadorCorrente = "jogador2";
+                                     if(jogadorCorrente.equals("Jogador1")){
+                                        jogadorCorrente = "Jogador2";
                                     }
-                               else if(jogadorCorrente.equals("jogador2")){
-                                        jogadorCorrente = "jogador3";
+                               else if(jogadorCorrente.equals("Jogador2")){
+                                        jogadorCorrente = "Jogador3";
                                     }
-                               else if(jogadorCorrente.equals("jogador3")){
-                                        jogadorCorrente = "jogador1";
+                               else if(jogadorCorrente.equals("Jogador3")){
+                                        jogadorCorrente = "Jogador1";
                                     }
                                 break;
                             }
@@ -180,7 +210,11 @@ public class ControleEtapa implements Observador{
             return validaSeLetraFoiEncontrada;
     }
   
-    
+    /** Método reisnsável por dar inicia a etapa.
+     * @param paramtros recebe objeto com parametros iniciais do jogo
+     * @param etapaAtual recebe o numero da etapa corrente.
+     * @throws IOException usado para retornar exceções da leitura do arquivo de palavras. 
+     */
     public static void iniciaEtapa(ParametrosIniciais paramtros, int etapaAtual) throws IOException{
 
      Iterator<String> it = listLetrasJaEscolhidas.iterator();
@@ -215,7 +249,7 @@ public class ControleEtapa implements Observador{
     posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
     Scanner sc = new Scanner(System.in);
   
-        System.out.println("***** Etapa: " + etapaAtual + " --> DICA: " + etapa.getLstPalavras().get(0) + " ***** ");
+        System.out.println("\n\n ***** Etapa: " + etapaAtual + " --> DICA: " + etapa.getLstPalavras().get(0) + " ***** ");
         for(int x = 1; x <= paramtros.getQtdPalavras(); x++){
             String palavraOculta = "#";
                 for(int i = 1; i < etapa.getLstPalavras().get(x).length(); i++){
@@ -239,23 +273,23 @@ public class ControleEtapa implements Observador{
 
             if(validaSeLetraFoiEncontrada == true){
                 valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
-                System.out.println("Valor sorteado foi --> " + valorSorteado);
+                System.out.println("Valor sorteado foi --> " + valorSorteado + "\n");
                 if(String.valueOf(valorSorteado).equals("PASSA_VEZ") || String.valueOf(valorSorteado).equals("PERDE_TUDO")){
                     switch(listJogadores.size()){
                                 case 2:
                                     boolean val = false;
                                     if(jogadorCorrente.equals("Jogador1")){
-                                        jogadorCorrente = "jogador2";
+                                        jogadorCorrente = "Jogador2";
                                         posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
                                         valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
-                                        System.out.println("Valor sorteado foi --> " + valorSorteado);
+                                        System.out.println("Valor sorteado foi --> " + valorSorteado + "\n");
                                         val = true;
                                     }
                                else if(jogadorCorrente.equals("Jogador2") && val == false){
                                         jogadorCorrente = "Jogador1";
                                         posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
                                         valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
-                                        System.out.println("Valor sorteado foi --> " + valorSorteado);
+                                        System.out.println("Valor sorteado foi --> " + valorSorteado + "\n");
                                     }
                                 break;
                                 case 3:
@@ -265,14 +299,14 @@ public class ControleEtapa implements Observador{
                                         jogadorCorrente = "Jogador2";
                                         posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
                                         valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
-                                        System.out.println("Valor sorteado foi --> " + valorSorteado);
+                                        System.out.println("Valor sorteado foi --> " + valorSorteado + "\n");
                                         val1 = true;
                                     }
                                else if(jogadorCorrente.equals("Jogador2") && val1 == false){
                                         jogadorCorrente = "Jogador3";
                                         posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
                                         valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
-                                        System.out.println("Valor sorteado foi --> " + valorSorteado);
+                                        System.out.println("Valor sorteado foi --> " + valorSorteado + "\n");
                                         val2 = true;
                                     }
                                else if(jogadorCorrente.equals("Jogador3") && val1 == false && val2 == false){
@@ -287,48 +321,49 @@ public class ControleEtapa implements Observador{
                 jogadorEscolheLetra(jogadorCorrente);
                 validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
 //                jogadorEscolheLetra(jogadorCorrente);
-                
-                System.out.println("Deseja informar as palavras? \n"
-                                 + "Informe 1 para Sim e 2 para não!");
-                int resposta = sc.nextInt();
-                if(resposta == 1){
-                    List<String> palavrasDigitadas = new ArrayList<>();
-                    palavrasDigitadas = jogadorEscolhePalavras(jogadorCorrente);
-                    switch(paramtros.getQtdPalavras()){
-                        case 1:
-                            if(etapa.getLstPalavras().get(1).equals(palavrasDigitadas.get(0))){
-                                System.out.println("Partida encerrada!"
-                                                 + jogadorCorrente + " ganhou a etapa!");
-                                sair = true;
+                if(validador == true){
+                        System.out.println("Deseja informar as palavras? \n"
+                                         + "Informe 1 para Sim e 2 para não!" + "\n\n");
+                        int resposta = Integer.parseInt(sc.nextLine());
+                        if(resposta == 1){
+                            List<String> palavrasDigitadas = new ArrayList<>();
+                            palavrasDigitadas = jogadorEscolhePalavras(jogadorCorrente);
+                            switch(paramtros.getQtdPalavras()){
+                                case 1:
+                                    if(etapa.getLstPalavras().get(1).equals(palavrasDigitadas.get(0))){
+                                        System.out.println("Partida encerrada!"
+                                                         + jogadorCorrente + " ganhou a etapa!");
+                                        sair = true;
+                                    }
+                                    else{
+                                        System.out.println("As palavras digitadas estão incorretas!");
+                                    }
+                                break;
+
+                                case 2:
+                                    if(etapa.getLstPalavras().get(1).equals(palavrasDigitadas.get(0)) && etapa.getLstPalavras().get(2).equals(palavrasDigitadas.get(1))){
+                                        System.out.println("Partida encerrada!"
+                                                         + jogadorCorrente + " ganhou a etapa!");
+                                        sair = true;
+                                    }
+                                    else{
+                                        System.out.println("As palavras digitadas estão incorretas!");
+                                    }
+                                break;
+
+                                case 3:
+                                    if(etapa.getLstPalavras().get(1).equals(palavrasDigitadas.get(0)) && etapa.getLstPalavras().get(2).equals(palavrasDigitadas.get(1))&& etapa.getLstPalavras().get(3).equals(palavrasDigitadas.get(2))){
+                                        System.out.println("Partida encerrada!"
+                                                         + jogadorCorrente + " ganhou a etapa!");
+                                        sair = true;
+                                    }
+                                    else{
+                                        System.out.println("As palavras digitadas estão incorretas!");
+                                    }
+                                break;
                             }
-                            else{
-                                System.out.println("As palavras digitadas estão incorretas!");
-                            }
-                        break;
-                            
-                        case 2:
-                            if(etapa.getLstPalavras().get(1).equals(palavrasDigitadas.get(0)) && etapa.getLstPalavras().get(2).equals(palavrasDigitadas.get(1))){
-                                System.out.println("Partida encerrada!"
-                                                 + jogadorCorrente + " ganhou a etapa!");
-                                sair = true;
-                            }
-                            else{
-                                System.out.println("As palavras digitadas estão incorretas!");
-                            }
-                        break;
-                            
-                        case 3:
-                            if(etapa.getLstPalavras().get(1).equals(palavrasDigitadas.get(0)) && etapa.getLstPalavras().get(2).equals(palavrasDigitadas.get(1))&& etapa.getLstPalavras().get(3).equals(palavrasDigitadas.get(2))){
-                                System.out.println("Partida encerrada!"
-                                                 + jogadorCorrente + " ganhou a etapa!");
-                                sair = true;
-                            }
-                            else{
-                                System.out.println("As palavras digitadas estão incorretas!");
-                            }
-                        break;
-                    }
-                    
+
+                        }
                 }
             }
             else{

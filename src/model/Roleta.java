@@ -10,12 +10,19 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/** Declaração da classe Roleta
+ * @author Geovane e José Sérgio
+ * @version 2.0
+ */
 public class Roleta {
 
     private List<EnumResultados> valores;// Setar os valores aqui
     private Map<Jogador, Integer> contadorJogadas; //para contar as jogadas de cada jogador
     private FormaSorteio formaSorteio;
     
+    /** Construtor da classe Roleta, armazena a quantidade de jogadas de cada jogador e cria uma
+     * lista de valores da roleta.
+     */
     public Roleta()
     {
         contadorJogadas = new LinkedHashMap<>();  
@@ -44,6 +51,9 @@ public class Roleta {
         
     }
     
+    /** Método responsável por definir qual será a forma se sorteio da roleta.
+     * @param jogador parametro responsável por receber o jogador que irá rodar a roleta.
+     */
     public EnumResultados roda(Jogador jogador)
     {
         int i = contabilizaJogas(jogador);
@@ -58,8 +68,7 @@ public class Roleta {
     }
     
     
-    /**
-     * Adiciona uma jogada ao mapa de jogadas e retorna qual o numero da jogada.
+    /**Adiciona uma jogada ao mapa de jogadas e retorna qual o numero da jogada.
      * @param jogador A rolar a roleta
      * @return quantidade de jogadas do jogador, inclusive esta.
      */

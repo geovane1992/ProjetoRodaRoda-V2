@@ -5,9 +5,9 @@ import java.util.ArrayList;
 import model.Jogador;
 import model.ParametrosIniciais;
 
-/**
- *
- * @author GAOliveira
+/** Declaração da classe ControlePartida
+ * @author Geovane e José Sérgio
+ * @version 2.0
  */
 public class ControlePartida {
 

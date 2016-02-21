@@ -9,8 +9,7 @@ import model.Roleta;
 
 
 
-/**
- * Classe responsável por inicializar a aplicação Roda Roda
+/** Classe responsável por inicializar a aplicação Roda Roda
  *
  * @author Geovane
  * @author José Sérgio
@@ -19,22 +18,15 @@ import model.Roleta;
  */
 public class RodaRoda {
 
+    /** Metodo Principal, responsável por chamar o menu inicial.
+    */
     public static void main(String[] args) throws IOException{
-        menu();
-        
-//        PalpiteLetra letra = new PalpiteLetra();
-//        Observador jogador = new ControleJogador("Geovane ", letra);
-//        letra.receberLetras("b");
-//        Observador jogador1 = new ControleJogador("Geovane ", letra);
-//        letra.receberLetras("a");
-        
-//        PalpitePalavra palavra = new PalpitePalavra();
-//        Observador jogador2 = new ControleJogador("Geovane ", palavra);
-//        palavra.receberPalavra("teste");
-        
-        
+        menu();        
     }
     
+    /** Método responsável por capturar os parametros iniciais do jogo e construir o menu.
+     * 
+     */
     public static void menu() throws IOException{
         Scanner lerParametros = new Scanner(System.in);
         ParametrosIniciais parametros = new ParametrosIniciais();
@@ -60,13 +52,6 @@ public class RodaRoda {
                          + " Quantidade de Palavras : " + parametros.getQtdPalavras() + "\n\n");
         
         ControlePartida.iniciaPartida(parametros);
-        
-//        Roleta roleta = new Roleta();
-//        Jogador jogador = new Jogador();
-//        jogador.setNome("Geovane");
-//        for(int i = 0; i<3;i++){
-//        System.out.println(roleta.roda(jogador));
-//        }
         
     }
 }

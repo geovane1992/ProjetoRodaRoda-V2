@@ -2,11 +2,14 @@ package model;
 
 import java.util.ArrayList;
 
-
+/** Declaração da classe Etapa
+ * @author Geovane e José Sérgio
+ * @version 2.0
+ */
 public class Etapa {
 
     private int etapa;
-    private String[] Palavra;
+    private String[] palavra;
     private Roleta roleta;
     private Rodada[] rodada;
     private ArrayList<String> lstPalavras;
@@ -20,11 +23,11 @@ public class Etapa {
     }
 
     public String[] getPalavra() {
-        return Palavra;
+        return palavra;
     }
 
     public void setPalavra(String[] Palavra) {
-        this.Palavra = Palavra;
+        this.palavra = Palavra;
     }
 
 

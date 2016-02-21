@@ -3,6 +3,10 @@ package controller;
 import java.util.List;
 import java.util.Random;
 
+/** Declaração da classe FormaAleatoria
+ * @author Geovane e José Sérgio
+ * @version 2.0
+ */
 public class FormaAleatoria implements FormaSorteio {
 
     private final int seed = 7;

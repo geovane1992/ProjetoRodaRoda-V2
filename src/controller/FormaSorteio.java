@@ -4,7 +4,8 @@ import java.util.List;
 
 /**
  * Interface para implementação do padrão Strategy
- * @author Vinicius
+ * @author Geovane e José Sérgio
+ * @version 2.0
  */
 public interface FormaSorteio {
 

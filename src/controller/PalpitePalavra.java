@@ -3,6 +3,10 @@ package controller;
 import java.util.ArrayList;
 import java.util.List;
 
+/** Declaração da classe PalpitePalavra
+ * @author Geovane e José Sérgio
+ * @version 2.0
+ */
 public class PalpitePalavra implements Observado {
 
     private List<Observador> observadores;

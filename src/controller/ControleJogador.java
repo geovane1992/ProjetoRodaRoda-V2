@@ -3,7 +3,10 @@ package controller;
 
 import java.util.List;
 
-
+/** Declaração da classe ControleJogador.
+ * @author Geovane e José Sérgio
+ * @version 2.0
+ */
 public class ControleJogador  implements Observador{
     
     String nome;

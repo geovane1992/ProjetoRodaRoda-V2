@@ -2,10 +2,11 @@ package model;
 
 
 import java.util.ArrayList;
-import model.Jogador;
-import model.Etapa;
 
-
+/** Declaração da classe Partida
+ * @author Geovane e José Sérgio
+ * @version 2.0
+ */
 public class Partida {
 
     private Etapa etapa;
