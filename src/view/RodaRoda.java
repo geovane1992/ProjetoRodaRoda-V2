@@ -3,7 +3,9 @@ package view;
 import controller.ControlePartida;
 import java.io.IOException;
 import java.util.Scanner;
+import model.Jogador;
 import model.ParametrosIniciais;
+import model.Roleta;
 
 
 
@@ -58,6 +60,13 @@ public class RodaRoda {
                          + " Quantidade de Palavras : " + parametros.getQtdPalavras() + "\n\n");
         
         ControlePartida.iniciaPartida(parametros);
+        
+//        Roleta roleta = new Roleta();
+//        Jogador jogador = new Jogador();
+//        jogador.setNome("Geovane");
+//        for(int i = 0; i<3;i++){
+//        System.out.println(roleta.roda(jogador));
+//        }
         
     }
 }

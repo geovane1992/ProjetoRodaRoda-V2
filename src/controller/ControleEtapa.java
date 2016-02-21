@@ -2,7 +2,6 @@ package controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
@@ -52,7 +51,7 @@ public class ControleEtapa implements Observador{
         listLetrasJaEscolhidas.add(letraEscolhida);
     }
     
-    public static void jogadorEscolhePalavras(String jogad){
+    public static List<String> jogadorEscolhePalavras(String jogad){
         Scanner leitor = new Scanner(System.in);
         System.out.println("Informe uma palavra!");
         String palavraEscolhida = leitor.nextLine();
@@ -60,7 +59,9 @@ public class ControleEtapa implements Observador{
         PalpitePalavra palavra = new PalpitePalavra();
         Observador jogador = new ControleJogador(jogad, palavra);
         palavra.receberPalavra(palavraEscolhida);
-        listLetrasJaEscolhidas.add(palavraEscolhida);
+        listPalavrasJaEscolhidas.add(palavraEscolhida);
+        
+        return listPalavrasJaEscolhidas;
     }
     
     public static boolean mostraPalavrasAacertar(int qtdPalavras, List<String> listaPalavrasEtapa){
@@ -161,6 +162,7 @@ public class ControleEtapa implements Observador{
     ArrayList<String> letrasEscolhidas = new ArrayList<>();
     Etapa etapa = new Etapa();
     etapa.setLstPalavras(LeitorArquivo.palavrasSorteadas());
+    Scanner sc = new Scanner(System.in);
   
         System.out.println("***** Etapa: " + etapaAtual + " --> DICA: " + etapa.getLstPalavras().get(0) + " ***** ");
         for(int x = 1; x <= paramtros.getQtdPalavras(); x++){
@@ -188,6 +190,49 @@ public class ControleEtapa implements Observador{
                 jogadorEscolheLetra(jogadorCorrente);
                 validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
 //                jogadorEscolheLetra(jogadorCorrente);
+                
+                System.out.println("Deseja informar as palavras? \n"
+                                 + "Informe 1 para Sim e 2 para não!");
+                int resposta = sc.nextInt();
+                if(resposta == 1){
+                    List<String> palavrasDigitadas = new ArrayList<>();
+                    palavrasDigitadas = jogadorEscolhePalavras(jogadorCorrente);
+                    switch(paramtros.getQtdPalavras()){
+                        case 1:
+                            if(etapa.getLstPalavras().get(1).equals(palavrasDigitadas.get(0))){
+                                System.out.println("Partida encerrada!"
+                                                 + jogadorCorrente + " ganhou a etapa!");
+                                sair = true;
+                            }
+                            else{
+                                System.out.println("As palavras digitadas estão incorretas!");
+                            }
+                        break;
+                            
+                        case 2:
+                            if(etapa.getLstPalavras().get(1).equals(palavrasDigitadas.get(0)) && etapa.getLstPalavras().get(2).equals(palavrasDigitadas.get(1))){
+                                System.out.println("Partida encerrada!"
+                                                 + jogadorCorrente + " ganhou a etapa!");
+                                sair = true;
+                            }
+                            else{
+                                System.out.println("As palavras digitadas estão incorretas!");
+                            }
+                        break;
+                            
+                        case 3:
+                            if(etapa.getLstPalavras().get(1).equals(palavrasDigitadas.get(0)) && etapa.getLstPalavras().get(2).equals(palavrasDigitadas.get(1))&& etapa.getLstPalavras().get(3).equals(palavrasDigitadas.get(2))){
+                                System.out.println("Partida encerrada!"
+                                                 + jogadorCorrente + " ganhou a etapa!");
+                                sair = true;
+                            }
+                            else{
+                                System.out.println("As palavras digitadas estão incorretas!");
+                            }
+                        break;
+                    }
+                    
+                }
             }
             else{
                 switch(paramtros.getQtdJogadores()){

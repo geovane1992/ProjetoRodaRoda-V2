@@ -65,7 +65,13 @@ public class Roleta {
      */
     private Integer contabilizaJogas(Jogador jogador)
     {
-        contadorJogadas.put(jogador, 1);
+        int i = 0 ;
+        
+        if(contadorJogadas.containsKey(jogador))        {
+            i = contadorJogadas.get(jogador);
+        }
+                
+        contadorJogadas.put(jogador, i + 1);
         return contadorJogadas.get(jogador);
     }
     

@@ -22,7 +22,7 @@ public class FormaAleatoria implements FormaSorteio {
             throw new IllegalArgumentException("A string de valores deve conter 20 elementos");
         }
         
-        Random gerador = new Random(seed);
+        Random gerador = new Random();
         
         return valores.get(gerador.nextInt(limite));        
     }
