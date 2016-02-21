@@ -53,6 +53,7 @@ public class Roleta {
     
     /** Método responsável por definir qual será a forma se sorteio da roleta.
      * @param jogador parametro responsável por receber o jogador que irá rodar a roleta.
+     * @return forma de sorteio da roleta, aleatorio ou viaciado
      */
     public EnumResultados roda(Jogador jogador)
     {

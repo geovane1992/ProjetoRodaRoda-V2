@@ -10,7 +10,7 @@ public class FormaViciada implements FormaSorteio {
 
     /**
      * Realiza o sorteio de forma viciada. Sempre retorna PASSA_VEZ
-     * @param valores
+     * @param valores recebe lista de valores da roleta
      * @return o valor PASSA_VEZ
      */
     @Override

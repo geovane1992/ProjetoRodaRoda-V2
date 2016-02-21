@@ -11,6 +11,10 @@ import model.ParametrosIniciais;
  */
 public class ControlePartida {
 
+    /** Método resposável por iniciar a partida chamando as etapas.
+     * @param paramtros recebe objeto com os parametros iniciais do jogo.
+     * @throws java.io.IOException informa possíveis erros da leitura do arquivo de palavras
+     */
     public static void iniciaPartida(ParametrosIniciais paramtros) throws IOException{
     Partida partida = new Partida();
     ArrayList<Jogador> lJogadores = new ArrayList<>();

@@ -28,7 +28,6 @@ public class Rodada {
         
         /**
          * Notifica os observadores.
-         * @param observer  observador
          */
 	public void notificaObservers() {
 

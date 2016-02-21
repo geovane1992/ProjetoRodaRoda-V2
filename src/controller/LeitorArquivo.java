@@ -15,6 +15,10 @@ import java.util.Random;
  */
 public class LeitorArquivo {
     
+        /** Método responsável por sortear qual tema da etapa e por ler palavras do tema 
+         * @throws IOException retornar erro da leitura do arquivo.
+         * @return lista de palavras lidas.
+         */
      	public static ArrayList ler() throws IOException{
             
             File tema = null;
@@ -60,7 +64,11 @@ public class LeitorArquivo {
 
 	}
         
-        
+        /**Método responsável por pegar apenas o tema e 3 palavras do total lidas 
+         * do arquivo.
+         * @throws IOException retorna erro da leitura do arquivo.
+         * @return lista de palavras com tema na primeira posição.
+         */
         public static ArrayList palavrasSorteadas() throws IOException{
             ArrayList<String> listaTodasPalavrasDoTema = new ArrayList();
             ArrayList<String> listaPalavrasSelecionasRodada = new ArrayList();

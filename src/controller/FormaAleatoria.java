@@ -15,8 +15,8 @@ public class FormaAleatoria implements FormaSorteio {
     
     /**
      * Executa o sorteio de forma atelatoria e retorna um resultado.
-     * @param valores
-     * @return 
+     * @param valores recebe lista de valores da roleta.
+     * @return valor sorteado.
      */
     @Override
     public EnumResultados realizaSorteio(List<EnumResultados> valores) {

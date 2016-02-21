@@ -1,6 +1,6 @@
 package controller;
 
-/** Declaração da classe EnumResultados
+/** Declaração da classe EnumResultados, possui os valores da roleta.
  * @author Geovane e José Sérgio
  * @version 2.0
  */
