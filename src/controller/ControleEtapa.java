@@ -77,15 +77,17 @@ public class ControleEtapa implements Observador{
      * @param jogad recebe jogador corrente.
      * @return lista de palavras já escolhidas pelo jogador
      */
-    public static List<String> jogadorEscolhePalavras(String jogad){
+    public static List<String> jogadorEscolhePalavras(String jogad, int qtdPalavras){
         Scanner leitor = new Scanner(System.in);
-        System.out.println("Informe uma palavra!");
-        String palavraEscolhida = leitor.nextLine();
-        
         PalpitePalavra palavra = new PalpitePalavra();
         Observador jogador = new ControleJogador(jogad, palavra);
-        palavra.receberPalavra(palavraEscolhida.toUpperCase());
-        listPalavrasJaEscolhidas.add(palavraEscolhida.toUpperCase());
+        String palavraEscolhida = null;
+        for(int i = 0; i < qtdPalavras; i++){
+            System.out.println("Informe uma palavra!");
+            palavraEscolhida = leitor.nextLine();
+            palavra.receberPalavra(palavraEscolhida.toUpperCase());
+            listPalavrasJaEscolhidas.add(palavraEscolhida.toUpperCase());
+        }
         
         return listPalavrasJaEscolhidas;
     }
@@ -105,12 +107,12 @@ public class ControleEtapa implements Observador{
         posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
 
         for(int x = 1; x <= qtdPalavras; x++){
-            String palavraOculta = "#";
+            String palavraOculta = "#"; 
                 for(int i = 1; i < listaPalavrasEtapa.get(x).length(); i++){
                     palavraOculta = palavraOculta + "#";    
-                }              
-                
+                }                             
             listaPalavrasASeremDescobertas.add(palavraOculta);
+            
             String s= listaPalavrasEtapa.get(x);
             char arr[]=s.toCharArray();
             for(int i=0;i<arr.length;i++){
@@ -194,14 +196,7 @@ public class ControleEtapa implements Observador{
                 }
             break;
         }
-
-                 
-//        if(Arrays.asList(listaPosicaoLetrasEncontradasPalavra1).contains(letraEscolhida)){
-           
-
-//        }
-//                Iterator<String> iterator = listLetrasJaEscolhidas.iterator();
-                
+      
                 // exibe os itens da lista usando um Iterator	
 //                for(Iterator<String> it = listaPalavrasASeremDescobertas.iterator(); it.hasNext();){
 //                  System.out.println(it.next());  
@@ -324,10 +319,17 @@ public class ControleEtapa implements Observador{
                 if(validador == true){
                         System.out.println("Deseja informar as palavras? \n"
                                          + "Informe 1 para Sim e 2 para não!" + "\n\n");
-                        int resposta = Integer.parseInt(sc.nextLine());
-                        if(resposta == 1){
+                        String resposta = sc.nextLine();
+                        while(Validador.validaSeENumero(resposta) == false || Integer.parseInt(resposta) < 1 || Integer.parseInt(resposta) > 2){
+                            System.out.println("Valor informado Inválido!");
+                            System.out.println("Deseja informar as palavras? \n"
+                                         + "Informe 1 para Sim e 2 para não!" + "\n\n");
+                            resposta = sc.nextLine();
+                            
+                        }
+                        if(Integer.parseInt(resposta) == 1){
                             List<String> palavrasDigitadas = new ArrayList<>();
-                            palavrasDigitadas = jogadorEscolhePalavras(jogadorCorrente);
+                            palavrasDigitadas = jogadorEscolhePalavras(jogadorCorrente, paramtros.getQtdPalavras());
                             switch(paramtros.getQtdPalavras()){
                                 case 1:
                                     if(etapa.getLstPalavras().get(1).equals(palavrasDigitadas.get(0))){
@@ -336,7 +338,13 @@ public class ControleEtapa implements Observador{
                                         sair = true;
                                     }
                                     else{
-                                        System.out.println("As palavras digitadas estão incorretas!");
+                                        if(paramtros.getQtdJogadores() == 1){
+                                            System.out.println("Você perdeu, pratique mais!");
+                                            sair = true;
+                                        }
+                                        else{
+                                            System.out.println("As palavras digitadas estão incorretas!");
+                                        }
                                     }
                                 break;
 
@@ -347,7 +355,13 @@ public class ControleEtapa implements Observador{
                                         sair = true;
                                     }
                                     else{
-                                        System.out.println("As palavras digitadas estão incorretas!");
+                                        if(paramtros.getQtdJogadores() == 1){
+                                            System.out.println("Você perdeu, pratique mais!");
+                                            sair = true;
+                                        }
+                                        else{
+                                            System.out.println("As palavras digitadas estão incorretas!");
+                                        }
                                     }
                                 break;
 
@@ -358,7 +372,13 @@ public class ControleEtapa implements Observador{
                                         sair = true;
                                     }
                                     else{
-                                        System.out.println("As palavras digitadas estão incorretas!");
+                                        if(paramtros.getQtdJogadores() == 1){
+                                            System.out.println("Você perdeu, pratique mais!");
+                                            sair = true;
+                                        }
+                                        else{
+                                            System.out.println("As palavras digitadas estão incorretas!");
+                                        }
                                     }
                                 break;
                             }
@@ -379,7 +399,7 @@ public class ControleEtapa implements Observador{
                             validador = mostraPalavrasAacertar(paramtros.getQtdPalavras(), etapa.getLstPalavras());
                             qtdErrosJogador = qtdErrosJogador + 1;
                         }
-                        else{
+                        else if(qtdErrosJogador >= 3){
                             System.out.println("Você perdeu, pratique mais!"); 
                             sair = true;
                         }
