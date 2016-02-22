@@ -92,6 +92,8 @@ public class ControleEtapa implements Observador{
         return listPalavrasJaEscolhidas;
     }
     
+    //--------------------------------------------------------------------------------------------------------------------
+    
     /** Método responsável por atualizar palavra esperada a cada letra infromada e 
      * armazenar os valores acumulados de cada jogador a cada rodada.
      * @param qtdPalavras recebe a quantidade de palavras da etapa.
@@ -204,6 +206,9 @@ public class ControleEtapa implements Observador{
             System.out.println("O valor acumulado está em --> R$ " + listJogadores.get(posicaoJogadorCorrenteNaLista-1).getPontuacao());
             return validaSeLetraFoiEncontrada;
     }
+    
+    
+  //-------------------------------------------------------------------------------------------------------------------------  
   
     /** Método reisnsável por dar inicia a etapa.
      * @param paramtros recebe objeto com parametros iniciais do jogo
@@ -235,7 +240,6 @@ public class ControleEtapa implements Observador{
      terminouPalavras = false;
      validaSeLetraFoiEncontrada = true;
      
-     //-------------------------------------------------------------------------
     
     ArrayList<String> letrasEscolhidas = new ArrayList<>();
     Etapa etapa = new Etapa();
@@ -254,23 +258,97 @@ public class ControleEtapa implements Observador{
             System.out.println(listaPalavrasASeremDescobertas.get(x-1));
         }
         
-        for(int i = 0; i < paramtros.getQtdJogadores(); i++){
-            Jogador jogador = new Jogador();
-            jogador.setNome("Jogador" + (i+1));
-            jogador.setPontuacao(0);
-            listJogadores.add(jogador);
+        if(etapaAtual == 1){
+            for(int i = 0; i < paramtros.getQtdJogadores(); i++){
+                Jogador jogador = new Jogador();
+                jogador.setNome("Jogador" + (i+1));
+                jogador.setPontuacao(0);
+                listJogadores.add(jogador);
+            }
         }
      
         boolean validador = true; 
         boolean sair = false;
+        boolean letraJaSaiu = false;
 
         while (terminouPalavras == false && sair == false) {
-
-            if(validaSeLetraFoiEncontrada == true){
+            if(validaSeLetraFoiEncontrada == true){ 
+                
+                for(Iterator<String> iterator = listLetrasJaEscolhidas.iterator(); iterator.hasNext();){
+                    String letra = iterator.next();
+                  if(letra.equals(letraSelecionada));  
+                  letraJaSaiu = true;
+                }
+                
+                if(letraJaSaiu == true){
+                    switch(listJogadores.size()){
+                                case 1:
+                                    if(letraJaSaiu == true){
+                                        qtdErrosJogador = qtdErrosJogador + 1;
+                                        System.out.println("Letra já foi escolhida!");
+                                    }
+                                    letraJaSaiu = false;
+                                break;
+                                case 2:
+                                    boolean val = false;
+                                    if(jogadorCorrente.equals("Jogador1")){
+                                        jogadorCorrente = "Jogador2";
+                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        val = true;
+                                    }
+                               else if(jogadorCorrente.equals("Jogador2") && val == false){
+                                        jogadorCorrente = "Jogador1";
+                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                    }
+                                    if(letraJaSaiu == true){
+                                        System.out.println("Letra já saiu anteriormente!");
+                                        letraJaSaiu = false;
+                                    }
+                                break;
+                                case 3:
+                                    boolean val1 = false;
+                                    boolean val2 = false;
+                                    if(jogadorCorrente.equals("Jogador1")){
+                                        jogadorCorrente = "Jogador2";
+                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        val1 = true;
+                                    }
+                               else if(jogadorCorrente.equals("Jogador2") && val1 == false){
+                                        jogadorCorrente = "Jogador3";
+                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        val2 = true;
+                                    }
+                               else if(jogadorCorrente.equals("Jogador3") && val1 == false && val2 == false){
+                                        jogadorCorrente = "Jogador1";
+                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                    }
+                                    if(letraJaSaiu == true){
+                                        System.out.println("Letra já saiu anteriormente!");
+                                        letraJaSaiu = false;
+                                    }
+                                break;
+                            }
+                }
+                
+                
                 valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
                 System.out.println("Valor sorteado foi --> " + valorSorteado + "\n");
                 if(String.valueOf(valorSorteado).equals("PASSA_VEZ") || String.valueOf(valorSorteado).equals("PERDE_TUDO")){
                     switch(listJogadores.size()){
+                                case 1:
+                                    if(letraJaSaiu == true){
+                                        qtdErrosJogador = qtdErrosJogador + 1;
+                                        System.out.println("Letra já foi escolhida!");
+                                    }
+                                    while(String.valueOf(valorSorteado).equals("PASSA_VEZ") || String.valueOf(valorSorteado).equals("PERDE_TUDO")){
+                                       posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        if(String.valueOf(valorSorteado).equals("PERDE_TUDO")){
+                                           listJogadores.get(posicaoJogadorCorrenteNaLista-1).setPontuacao(0);
+                                       }
+                                        valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
+                                        System.out.println("Valor sorteado foi --> " + valorSorteado + "\n");
+                                    }
+                                break;
                                 case 2:
                                     boolean val = false;
                                     if(jogadorCorrente.equals("Jogador1")){
@@ -290,7 +368,7 @@ public class ControleEtapa implements Observador{
                                 case 3:
                                     boolean val1 = false;
                                     boolean val2 = false;
-                                     if(jogadorCorrente.equals("Jogador1")){
+                                    if(jogadorCorrente.equals("Jogador1")){
                                         jogadorCorrente = "Jogador2";
                                         posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
                                         valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
@@ -310,6 +388,7 @@ public class ControleEtapa implements Observador{
                                         valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
                                         System.out.println("Valor sorteado foi --> " + valorSorteado);
                                     }
+                                    
                                 break;
                             }
                 }
