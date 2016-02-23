@@ -1,5 +1,6 @@
 package controller;
 
+import java.awt.JobAttributes;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -29,6 +30,8 @@ public class ControleEtapa implements Observador{
     static boolean validaSeLetraFoiEncontrada = true;
     static int posicaoJogadorCorrenteNaLista = 0;
     static EnumResultados valorSorteado = null;
+    static boolean letraJaSaiu = false;
+    static boolean naoPassarMais = false;
     
     /** Construtor da classe ControleEtapa
      * @param etapa recebe o numero da etapa a ser realizada
@@ -61,15 +64,25 @@ public class ControleEtapa implements Observador{
      * @param jogad recebe jogador corrente.
      */
     public static void jogadorEscolheLetra(String jogad){
+        letraJaSaiu = false;
+        naoPassarMais = false;
         Scanner leitor = new Scanner(System.in);
         System.out.println(jogad + " informe uma letra!");
         String letraEscolhida = leitor.nextLine();
         letraSelecionada = letraEscolhida.toUpperCase();
         
+        for(Iterator<String> iterator = listLetrasJaEscolhidas.iterator(); iterator.hasNext();){
+          String letraIter = iterator.next();
+          if(letraIter.equals(letraSelecionada)){
+            letraJaSaiu = true;
+          }
+        }
+
         PalpiteLetra letra = new PalpiteLetra();
         Observador jogador = new ControleJogador(jogad, letra);
         letra.receberLetras(letraEscolhida.toUpperCase());
         listLetrasJaEscolhidas.add(letraEscolhida.toUpperCase());
+                
     }
     
     /** Método responsável por receber palavra informada pelo jogador e adicionar a lista
@@ -102,9 +115,9 @@ public class ControleEtapa implements Observador{
      */
     public static boolean mostraPalavrasAacertar(int qtdPalavras, List<String> listaPalavrasEtapa){
         
-        System.out.println(listaPalavrasEtapa.get(1));
-        System.out.println(listaPalavrasEtapa.get(2));
-        System.out.println(listaPalavrasEtapa.get(3));
+//        System.out.println(listaPalavrasEtapa.get(1));
+//        System.out.println(listaPalavrasEtapa.get(2));
+//        System.out.println(listaPalavrasEtapa.get(3));
         validaSeLetraFoiEncontrada = false;
         posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
 
@@ -118,7 +131,7 @@ public class ControleEtapa implements Observador{
             String s= listaPalavrasEtapa.get(x);
             char arr[]=s.toCharArray();
             for(int i=0;i<arr.length;i++){
-                if(String.valueOf(arr[i]).equals(letraSelecionada)){
+                if(String.valueOf(arr[i]).equals(letraSelecionada) && letraJaSaiu == false){
                     
                     StringBuilder String = new StringBuilder(listaPalavrasASeremDescobertas.get(x-1));
                     StringBuilder sb = String.replace(i, i+1, letraSelecionada);
@@ -168,11 +181,59 @@ public class ControleEtapa implements Observador{
                             listJogadores.get(posicaoJogadorCorrenteNaLista-1).setPontuacao(0);
                         break;
                         
-                    }
-                    
+                    } 
                     validaSeLetraFoiEncontrada = true;
 
                 }
+                
+                if(letraJaSaiu == true && naoPassarMais == false){
+                        switch(listJogadores.size()){
+                                    case 1:
+                                        if(letraJaSaiu == true){
+                                            qtdErrosJogador = qtdErrosJogador + 1;
+                                            System.out.println("Letra já foi escolhida!");
+                                        }
+                                    break;
+                                    case 2:
+                                        boolean val = false;
+                                        if(jogadorCorrente.equals("Jogador1")){
+                                            jogadorCorrente = "Jogador2";
+                                            posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                            val = true;
+                                        }
+                                   else if(jogadorCorrente.equals("Jogador2") && val == false){
+                                            jogadorCorrente = "Jogador1";
+                                            posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        }
+                                        if(letraJaSaiu == true){
+                                            System.out.println("Letra já saiu anteriormente!");
+                                        }
+                                    break;
+                                    case 3:
+                                        boolean val1 = false;
+                                        boolean val2 = false;
+                                        if(jogadorCorrente.equals("Jogador1")){
+                                            jogadorCorrente = "Jogador2";
+                                            posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                            val1 = true;
+                                        }
+                                   else if(jogadorCorrente.equals("Jogador2") && val1 == false){
+                                            jogadorCorrente = "Jogador3";
+                                            posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                            val2 = true;
+                                        }
+                                   else if(jogadorCorrente.equals("Jogador3") && val1 == false && val2 == false){
+                                            jogadorCorrente = "Jogador1";
+                                            posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
+                                        }
+                                        if(letraJaSaiu == true ){
+                                            System.out.println("Letra já saiu anteriormente!");
+                                        }
+                                    break;
+                        }
+                        naoPassarMais = true;
+                        letraJaSaiu = false;
+                    }
             }
                 
             System.out.println(listaPalavrasASeremDescobertas.get(x-1));
@@ -182,19 +243,34 @@ public class ControleEtapa implements Observador{
             case 1:
                 if(!listaPalavrasASeremDescobertas.get(0).contains("#")){
                     terminouPalavras = true;
-                    System.out.println(jogadorCorrente + " ganhou a etapa!");
+                    
+                            System.out.println("Jogador1" + " ganhou a etapa com a maior pontuação! Valor: " +  listJogadores.get(0).getPontuacao() );			                    
+                    
                 }
             break;
             case 2:
                 if(!listaPalavrasASeremDescobertas.get(0).contains("#") && !listaPalavrasASeremDescobertas.get(1).contains("#")){
                     terminouPalavras = true;
-                    System.out.println(jogadorCorrente + " ganhou a etapa!");
+                   if (listJogadores.get(0).getPontuacao() > listJogadores.get(1).getPontuacao()){ 	
+                            System.out.println("Jogador1" + " ganhou a etapa com a maior pontuação! Valor: " +  listJogadores.get(0).getPontuacao() );			                    
+                    }
+                    else{ 
+                            System.out.println("Jogador2" + " ganhou a etapa com a maior pontuação! Valor: " +  listJogadores.get(2).getPontuacao() );
+                    }
                 }
             break;
             case 3:
                 if(!listaPalavrasASeremDescobertas.get(0).contains("#") && !listaPalavrasASeremDescobertas.get(1).contains("#") && !listaPalavrasASeremDescobertas.get(2).contains("#")){
                     terminouPalavras = true;
-                    System.out.println(jogadorCorrente + " ganhou a etapa!");
+                    if (listJogadores.get(0).getPontuacao() > listJogadores.get(1).getPontuacao() && listJogadores.get(0).getPontuacao() > listJogadores.get(2).getPontuacao()){ 	
+                            System.out.println("Jogador1" + " ganhou a etapa com a maior pontuação! Valor: " +  listJogadores.get(0).getPontuacao() );			                    
+                    }
+                    else if (listJogadores.get(1).getPontuacao() > listJogadores.get(2).getPontuacao()){			              
+                            System.out.println("Jogador2" + " ganhou a etapa com a maior pontuação! Valor: " +  listJogadores.get(1).getPontuacao() );
+                    }
+                    else{ 
+                            System.out.println("Jogador3" + " ganhou a etapa com a maior pontuação! Valor: " +  listJogadores.get(2).getPontuacao() );
+                    }
                 }
             break;
         }
@@ -222,6 +298,13 @@ public class ControleEtapa implements Observador{
             if(it.next() != null){
                 it.remove();
             }
+        }
+        
+        Iterator<Jogador> it1 = listJogadores.iterator();
+        while(it1.hasNext()){
+//            if(it1.next() != null){
+                it1.next().setPontuacao(0);
+//            }
         }
         
         Iterator<String> it2 = listPalavrasJaEscolhidas.iterator();
@@ -269,67 +352,9 @@ public class ControleEtapa implements Observador{
      
         boolean validador = true; 
         boolean sair = false;
-        boolean letraJaSaiu = false;
 
         while (terminouPalavras == false && sair == false) {
             if(validaSeLetraFoiEncontrada == true){ 
-                
-                for(Iterator<String> iterator = listLetrasJaEscolhidas.iterator(); iterator.hasNext();){
-                    String letra = iterator.next();
-                  if(letra.equals(letraSelecionada));  
-                  letraJaSaiu = true;
-                }
-                
-                if(letraJaSaiu == true){
-                    switch(listJogadores.size()){
-                                case 1:
-                                    if(letraJaSaiu == true){
-                                        qtdErrosJogador = qtdErrosJogador + 1;
-                                        System.out.println("Letra já foi escolhida!");
-                                    }
-                                    letraJaSaiu = false;
-                                break;
-                                case 2:
-                                    boolean val = false;
-                                    if(jogadorCorrente.equals("Jogador1")){
-                                        jogadorCorrente = "Jogador2";
-                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
-                                        val = true;
-                                    }
-                               else if(jogadorCorrente.equals("Jogador2") && val == false){
-                                        jogadorCorrente = "Jogador1";
-                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
-                                    }
-                                    if(letraJaSaiu == true){
-                                        System.out.println("Letra já saiu anteriormente!");
-                                        letraJaSaiu = false;
-                                    }
-                                break;
-                                case 3:
-                                    boolean val1 = false;
-                                    boolean val2 = false;
-                                    if(jogadorCorrente.equals("Jogador1")){
-                                        jogadorCorrente = "Jogador2";
-                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
-                                        val1 = true;
-                                    }
-                               else if(jogadorCorrente.equals("Jogador2") && val1 == false){
-                                        jogadorCorrente = "Jogador3";
-                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
-                                        val2 = true;
-                                    }
-                               else if(jogadorCorrente.equals("Jogador3") && val1 == false && val2 == false){
-                                        jogadorCorrente = "Jogador1";
-                                        posicaoJogadorCorrenteNaLista = Integer.parseInt(jogadorCorrente.substring(7, 8));
-                                    }
-                                    if(letraJaSaiu == true){
-                                        System.out.println("Letra já saiu anteriormente!");
-                                        letraJaSaiu = false;
-                                    }
-                                break;
-                            }
-                }
-                
                 
                 valorSorteado = roleta.roda(listJogadores.get(posicaoJogadorCorrenteNaLista -1));
                 System.out.println("Valor sorteado foi --> " + valorSorteado + "\n");
